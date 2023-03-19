@@ -21,24 +21,10 @@ export class KafkaConsumerService implements OnModuleInit {
     });
 
     await this.consumer.run({
-      eachBatchAutoResolve: true,
-      eachBatch: async ({
-        batch,
-        resolveOffset,
-        heartbeat,
-        commitOffsetsIfNecessary,
-        uncommittedOffsets,
-        isRunning,
-        isStale,
-        pause,
-      }) => {
-        for (const message of batch.messages) {
-          const requestInfo = JSON.parse(message.value.toString());
-          await this.performRequest(requestInfo);
-
-          resolveOffset(message.offset);
-          await heartbeat();
-        }
+      eachMessage: async ({ topic, partition, message, heartbeat, pause }) => {
+        const requestInfo = JSON.parse(message.value.toString());
+        await this.performRequest(requestInfo);
+        await heartbeat();
       },
     });
   }
