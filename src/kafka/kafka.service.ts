@@ -1,14 +1,17 @@
-import { Injectable } from '@nestjs/common';
 import { Kafka, logLevel } from 'kafkajs';
 
 export class KafkaService {
-  private kafka: Kafka;
+  private readonly kafka: Kafka;
 
   constructor() {
     this.kafka = new Kafka({
       clientId: 'nestjs-kafka-client',
       brokers: ['localhost:9092'],
-      logLevel: logLevel.ERROR,
+      retry: {
+        initialRetryTime: 3000,
+        retries: 10,
+      },
+      logLevel: logLevel.INFO,
     });
   }
 

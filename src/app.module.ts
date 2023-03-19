@@ -12,4 +12,8 @@ import { RequestLoggingMiddleware } from './middleware/RequestLogging.middleware
   controllers: [AppController, KafkaController],
   providers: [AppService, KafkaProducerService, KafkaConsumerService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggingMiddleware).forRoutes('*');
+  }
+}
