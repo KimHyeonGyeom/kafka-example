@@ -21,7 +21,10 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "topic"
     ports:
       - "9092:9092"
     depends_on:
       - zookeeper
+    volumes:
+      - ./data:/var/lib/kafka/data
